@@ -1,5 +1,5 @@
 const http        = require('http'),
-      querystring = requrie('querystring')
+      querystring = require('querystring')
 
 /**
  * @typedef CommandScope
