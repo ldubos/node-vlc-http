@@ -122,7 +122,7 @@ class VLC {
    * @public
    * @return {Promise<Array<object>>}
    */
-  updateInfos() {
+  updateAll() {
     return Promise.all([
       this.updateBrowse(),
       this.updateStatus(),
@@ -255,7 +255,7 @@ class VLC {
 
   /**
    * Sort playlist using sort mode `mode` and order `order`.
-   * If `order` = 0 then items will be sorted in normal order, if `order` = ` they will be sorted in reverse order.
+   * If `order` = 0 then items will be sorted in normal order, if `order` = 1 ` they will be sorted in reverse order.
    * A non exhaustive list of sort modes:
    *  0 Id
    *  1 Name
@@ -270,7 +270,7 @@ class VLC {
   sortPlaylist(order, mode) {
     return this._sendCommand(CommandScopes.STATUS, 'pl_sort', {
       id: mode,
-      val: mode
+      val: order
     })
   }
 
@@ -280,7 +280,7 @@ class VLC {
    * @param   {number}            delay delay in seconds
    * @return  {Promise<object>}
    */
-  setAudioDelay() {
+  setAudioDelay(delay) {
     return this._sendCommand(CommandScopes.STATUS, 'audiodelay', { val: delay })
   }
 
@@ -290,7 +290,7 @@ class VLC {
    * @param   {number}            delay delay in seconds
    * @return  {Promise<object>}
    */
-  setSubtitleDelay() {
+  setSubtitleDelay(delay) {
     return this._sendCommand(CommandScopes.STATUS, 'subdelay', { val: delay })
   }
 
@@ -300,7 +300,7 @@ class VLC {
    * @param   {number}            rate must be > 0
    * @return  {Promise<object>}
    */
-  setPlaybackRate() {
+  setPlaybackRate(rate) {
     return this._sendCommand(CommandScopes.STATUS, 'rate', { val: rate })
   }
 
