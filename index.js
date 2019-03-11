@@ -387,7 +387,7 @@ class VLC {
    * @public
    * @return {Promise<object>}
    */
-  toggleRepeat() {
+  toggleFullscreen() {
     return this._sendCommand(CommandScopes.STATUS, 'fullscreen')
   }
 
