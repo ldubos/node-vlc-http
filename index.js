@@ -97,7 +97,7 @@ class VLC {
    * @return {Promise<object>}
    */
   updateBrowse() {
-    return this._sendCommand(CommandScopes.BROWSE)
+    return this._sendCommand(CommandScope.Browse)
   }
 
   /**
@@ -106,7 +106,7 @@ class VLC {
    * @return {Promise<object>}
    */
   updateStatus() {
-    return this._sendCommand(CommandScopes.STATUS)
+    return this._sendCommand(CommandScope.Status)
   }
 
   /**
@@ -115,7 +115,7 @@ class VLC {
    * @return {Promise<object>}
    */
   updatePlaylist() {
-    return this._sendCommand(CommandScopes.PLAYLIST)
+    return this._sendCommand(CommandScope.Playlist)
   }
 
   /**
@@ -145,7 +145,7 @@ class VLC {
     if (option)
       options.option = option
 
-    return this._sendCommand(CommandScopes.STATUS, 'in_play', options)
+    return this._sendCommand(CommandScope.Status, 'in_play', options)
   }
 
   /**
@@ -155,7 +155,7 @@ class VLC {
    * @return  {Promise<object>}
    */
   addToQueue(uri) {
-    return this._sendCommand(CommandScopes.STATUS, 'in_enqueue', { input: uri })
+    return this._sendCommand(CommandScope.Status, 'in_enqueue', { input: uri })
   }
 
   /**
@@ -165,7 +165,7 @@ class VLC {
    * @return  {Promise<object>}
    */
   addSubtitle(uri) {
-    return this._sendCommand(CommandScopes.STATUS, 'addsubtitle', { input: uri })
+    return this._sendCommand(CommandScope.Status, 'addsubtitle', { input: uri })
   }
 
   /**
@@ -175,7 +175,7 @@ class VLC {
    * @return  {Promise<object>}
    */
   play(id) {
-    return this._sendCommand(CommandScopes.STATUS, 'pl_play', { id })
+    return this._sendCommand(CommandScope.Status, 'pl_play', { id })
   }
 
   /**
@@ -186,7 +186,7 @@ class VLC {
    * @return  {Promise<object>}
    */
   pause(id) {
-    return this._sendCommand(CommandScopes.STATUS, 'pl_pause', { id })
+    return this._sendCommand(CommandScope.Status, 'pl_pause', { id })
   }
 
   /**
@@ -195,7 +195,7 @@ class VLC {
    * @return {Promise<object>}
    */
   stop() {
-    return this._sendCommand(CommandScopes.STATUS, 'pl_forcepause')
+    return this._sendCommand(CommandScope.Status, 'pl_forcepause')
   }
 
   /**
@@ -204,7 +204,7 @@ class VLC {
    * @return {Promise<object>}
    */
   resume() {
-    return this._sendCommand(CommandScopes.STATUS, 'pl_forceresume')
+    return this._sendCommand(CommandScope.Status, 'pl_forceresume')
   }
 
   /**
@@ -213,7 +213,7 @@ class VLC {
    * @return {Promise<object>}
    */
   forcePause() {
-    return this._sendCommand(CommandScopes.STATUS, 'pl_forcepause')
+    return this._sendCommand(CommandScope.Status, 'pl_forcepause')
   }
 
   /**
@@ -222,7 +222,7 @@ class VLC {
    * @return {Promise<object>}
    */
   playlistNext() {
-    return this._sendCommand(CommandScopes.STATUS, 'pl_next')
+    return this._sendCommand(CommandScope.Status, 'pl_next')
   }
 
   /**
@@ -231,7 +231,7 @@ class VLC {
    * @return {Promise<object>}
    */
   playlistPrevious() {
-    return this._sendCommand(CommandScopes.STATUS, 'pl_previous')
+    return this._sendCommand(CommandScope.Status, 'pl_previous')
   }
 
   /**
@@ -241,7 +241,7 @@ class VLC {
    * @return  {Promise<object>}
    */
   playlistDelete(id) {
-    return this._sendCommand(CommandScopes.STATUS, 'pl_delete', { id })
+    return this._sendCommand(CommandScope.Status, 'pl_delete', { id })
   }
 
   /**
@@ -250,7 +250,7 @@ class VLC {
    * @return {Promise<object>}
    */
   playlistEmpty() {
-    return this._sendCommand(CommandScopes.STATUS, 'pl_empty')
+    return this._sendCommand(CommandScope.Status, 'pl_empty')
   }
 
   /**
@@ -268,7 +268,7 @@ class VLC {
    * @return  {Promise<object>}
    */
   sortPlaylist(order, mode) {
-    return this._sendCommand(CommandScopes.STATUS, 'pl_sort', {
+    return this._sendCommand(CommandScope.Status, 'pl_sort', {
       id: mode,
       val: order
     })
@@ -281,7 +281,7 @@ class VLC {
    * @return  {Promise<object>}
    */
   setAudioDelay(delay) {
-    return this._sendCommand(CommandScopes.STATUS, 'audiodelay', { val: delay })
+    return this._sendCommand(CommandScope.Status, 'audiodelay', { val: delay })
   }
 
   /**
@@ -291,7 +291,7 @@ class VLC {
    * @return  {Promise<object>}
    */
   setSubtitleDelay(delay) {
-    return this._sendCommand(CommandScopes.STATUS, 'subdelay', { val: delay })
+    return this._sendCommand(CommandScope.Status, 'subdelay', { val: delay })
   }
 
   /**
@@ -301,7 +301,7 @@ class VLC {
    * @return  {Promise<object>}
    */
   setPlaybackRate(rate) {
-    return this._sendCommand(CommandScopes.STATUS, 'rate', { val: rate })
+    return this._sendCommand(CommandScope.Status, 'rate', { val: rate })
   }
 
   /**
@@ -311,7 +311,7 @@ class VLC {
    * @return  {Promise<object>}
    */
   setAspectRatio(ratio) {
-    return this._sendCommand(CommandScopes.STATUS, 'aspectratio', { val: ratio })
+    return this._sendCommand(CommandScope.Status, 'aspectratio', { val: ratio })
   }
 
   /**
@@ -321,7 +321,7 @@ class VLC {
    * @return  {Promise<object>}
    */
   setVolume(volume) {
-    return this._sendCommand(CommandScopes.STATUS, 'volume', { val: volume })
+    return this._sendCommand(CommandScope.Status, 'volume', { val: volume })
   }
 
   /**
@@ -331,7 +331,7 @@ class VLC {
    * @return  {Promise<object>}
    */
   setPreamp(value) {
-    return this._sendCommand(CommandScopes.STATUS, 'preamp', { val: value })
+    return this._sendCommand(CommandScope.Status, 'preamp', { val: value })
   }
 
   /**
@@ -342,7 +342,7 @@ class VLC {
    * @return  {Promise<object>}
    */
   setEqualizer(band, gain) {
-    return this._sendCommand(CommandScopes.STATUS, 'equalizer', { band: band, val: gain })
+    return this._sendCommand(CommandScope.Status, 'equalizer', { band: band, val: gain })
   }
 
   /**
@@ -352,7 +352,7 @@ class VLC {
    * @return  {Promise<object>}
    */
   setEqualizerPreset(id) {
-    return this._sendCommand(CommandScopes.STATUS, 'equalizer', { val: id })
+    return this._sendCommand(CommandScope.Status, 'equalizer', { val: id })
   }
 
   /**
@@ -361,7 +361,7 @@ class VLC {
    * @return {Promise<object>}
    */
   toggleRandom() {
-    return this._sendCommand(CommandScopes.STATUS, 'pl_random')
+    return this._sendCommand(CommandScope.Status, 'pl_random')
   }
 
   /**
@@ -370,7 +370,7 @@ class VLC {
    * @return {Promise<object>}
    */
   toggleLoop() {
-    return this._sendCommand(CommandScopes.STATUS, 'pl_loop')
+    return this._sendCommand(CommandScope.Status, 'pl_loop')
   }
 
   /**
@@ -379,7 +379,7 @@ class VLC {
    * @return {Promise<object>}
    */
   toggleRepeat() {
-    return this._sendCommand(CommandScopes.STATUS, 'pl_repeat')
+    return this._sendCommand(CommandScope.Status, 'pl_repeat')
   }
 
   /**
@@ -388,7 +388,7 @@ class VLC {
    * @return {Promise<object>}
    */
   toggleFullscreen() {
-    return this._sendCommand(CommandScopes.STATUS, 'fullscreen')
+    return this._sendCommand(CommandScope.Status, 'fullscreen')
   }
 
   /**
@@ -399,7 +399,7 @@ class VLC {
    * @return  {Promise<object>}
    */
   seek(time) {
-    return this._sendCommand(CommandScopes.STATUS, 'seek', { val: time })
+    return this._sendCommand(CommandScope.Status, 'seek', { val: time })
   }
 
   /**
@@ -409,7 +409,7 @@ class VLC {
    * @return  {Promise<object>}
    */
   seekToChapter(chapter) {
-    return this._sendCommand(CommandScopes.STATUS, 'chapter', { val: chapter })
+    return this._sendCommand(CommandScope.Status, 'chapter', { val: chapter })
   }
 
   /**
