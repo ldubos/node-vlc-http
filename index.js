@@ -45,7 +45,7 @@ class VLC {
    * @param   {object=}         options
    * @return  {Promise<object>}
    */
-  _command(scope, command, options) {
+  _sendCommand(scope, command, options) {
     return new Promise((resolve, reject) => {
       let query = null
 
