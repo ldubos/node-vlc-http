@@ -1,8 +1,17 @@
 {
   "name": "node-vlc-http",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "HTTP API client for vlc.",
-  "keywords": ["nodejs", "vlc", "http", "http-client", "client", "vlc-player", "api", "api-client"],
+  "keywords": [
+    "nodejs",
+    "vlc",
+    "http",
+    "http-client",
+    "client",
+    "vlc-player",
+    "api",
+    "api-client"
+  ],
   "main": "index.js",
   "repository": "https://github.com/ldubos/node-vlc-http.git",
   "author": "ldubos <ludwig.dubos@gmail.com>",
