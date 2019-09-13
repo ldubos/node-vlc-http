@@ -15,44 +15,78 @@ or
 ### Basics
 
 ```js
-const vlc = require('node-vlc-http')(host, port, username, password)
+const { VLC } = require('node-vlc-http');
 
-// update browse, status and playlist at the same time
+const vlc = new VLC({
+  host,
+  port,
+  username,
+  password,
+  // update automatically status and playlist of VLC, default true.
+  autoUpdate,
+  // how many times per seconds (in ms) node-vlc-http will update the status of VLC, default 1000/30 ~ 33ms (30fps)
+  tickLengthMs,
+  // checks that browse, status and playlist have changed since the last update of one of its elements,
+  // if it the case fire browsechange, statuschange or playlistchange event. default true.
+  changeEvents
+});
+
+// update status and playlist at the same time
 vlc.updateAll()
   .then(results => {
-    const [browse, status, playlist] = results
+    const [status, playlist] = results
   })
   .catch(console.error)
 
-// update browse
-vlc.updateBrowse()
+vlc.browse(path)
   .then(browse => {
     // do stuff
   })
   .catch(console.error)
-
-// get browse
-const browse = vlc.browse
 
 // update status
 vlc.updateStatus()
-  .then(browse => {
+  .then(status => {
     // do stuff
   })
   .catch(console.error)
-
-// get status
-const status = vlc.status
 
 // update playlist
 vlc.updatePlaylist()
-  .then(browse => {
+  .then(playlist => {
     // do stuff
   })
   .catch(console.error)
+```
 
-// get playlist
-const playlist = vlc.playlist
+### Events
+
+```js
+vlc.on('tick', (delta) => {
+  // do stuff
+});
+
+vlc.on('update', (status, playlist) => {
+  // do stuff
+});
+
+vlc.on(
+  'statuschange',
+  (prev, next) => {
+    // do stuff
+  }
+);
+
+vlc.on(
+  'playlistchange',
+  (prev, next) => {
+    // do stuff
+  }
+);
+
+vlc.on('error', listener: (err: Error) => {
+  // do stuff
+});
 ```
 
 ### Actions

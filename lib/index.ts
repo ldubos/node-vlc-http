@@ -144,7 +144,7 @@ export type VLCOptions = {
   port?: number;
   username: string;
   password: string;
-  /** update automatically browse, status and playlist of VLC, default true. */
+  /** update automatically status and playlist of VLC, default true. */
   autoUpdate?: boolean;
   /** how many times per seconds (in ms) node-vlc-http will update the status of VLC, default 1000/30 ~ 33ms (30fps).*/
   tickLengthMs?: number;
