@@ -178,7 +178,7 @@ function getNano(): number {
 
 function get<T = any>(options: http.RequestOptions): Promise<T> {
   return new Promise((resolve, reject) => {
-    http.get(options, response => {
+    const req = http.get(options, response => {
       let data = '';
 
       response.on('error', reject);
@@ -191,6 +191,8 @@ function get<T = any>(options: http.RequestOptions): Promise<T> {
         }
       });
     });
+
+    req.on('error', reject);
   });
 }
 
@@ -241,10 +243,15 @@ export class VLC extends EventEmitter {
       `${options.username}:${options.password}`
     ).toString('base64')}`;
 
-    if (this._autoUpdate) {
-      // start loop
-      this._doTick();
-    }
+    // check if VLC is up
+    this._sendCommand(CommandScope.STATUS)
+      .catch(this.emit.bind(this, 'error'))
+      .then(() => {
+        if (this._autoUpdate) {
+          // start loop
+          this._doTick();
+        }
+      });
   }
 
   private _doTick(): void {
