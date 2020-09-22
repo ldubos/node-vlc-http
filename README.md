@@ -28,7 +28,11 @@ const vlc = new VLC({
   tickLengthMs,
   // checks that browse, status and playlist have changed since the last update of one of its elements,
   // if it the case fire browsechange, statuschange or playlistchange event. default true.
-  changeEvents
+  changeEvents,
+  // max tries at the first connection before throwing an error set it to -1 for infinite try, default -1
+  maxTries,
+  // interval between each try in ms, default 1000
+  triesInterval
 });
 
 // update status and playlist at the same time
@@ -84,9 +88,13 @@ vlc.on(
   }
 );
 
-vlc.on('error', listener: (err: Error) => {
+vlc.on('error', (err: Error) => {
   // do stuff
 });
+
+vlc.on('connect', () => {
+  // do stuff
+})
 ```
 
 ### Actions

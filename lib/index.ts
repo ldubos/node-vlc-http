@@ -25,6 +25,7 @@ export interface Audiofilters {
 }
 
 export interface Meta {
+  // eslint-disable-next-line camelcase
   encoded_by: string;
   filename: string;
 }
@@ -106,8 +107,10 @@ type BrowseElement = {
   path: string;
   name: string;
   uid: number;
+  // eslint-disable-next-line camelcase
   creation_time: number;
   gid: number;
+  // eslint-disable-next-line camelcase
   modification_time: number;
   mode: number;
   uri: string;
@@ -139,6 +142,9 @@ type PlaylistNode = PlaylistBase & {
 
 type Playlist = PlaylistNode | PlaylistLeaf;
 
+const waitFor = (ms: number): Promise<void> =>
+  new Promise(resolve => setTimeout(resolve, ms));
+
 export type VLCOptions = {
   host?: string;
   port?: number;
@@ -146,13 +152,17 @@ export type VLCOptions = {
   password: string;
   /** update automatically status and playlist of VLC, default true. */
   autoUpdate?: boolean;
-  /** how many times per seconds (in ms) node-vlc-http will update the status of VLC, default 1000/30 ~ 33ms (30fps).*/
+  /** how many times per seconds (in ms) node-vlc-http will update the status of VLC, default 1000/30 ~ 33ms (30fps). */
   tickLengthMs?: number;
   /**
    * checks that browse, status and playlist have changed since the last update of one of its elements,
    * if it the case fire browsechange, statuschange or playlistchange event. default true.
    */
   changeEvents?: boolean;
+  /** max tries at the first connection before throwing an error set it to -1 for infinite try, default -1 */
+  maxTries?: number;
+  /** interval between two try in ms, default 1000 */
+  triesInterval?: number;
 };
 
 export declare interface VLC {
@@ -164,6 +174,8 @@ export declare interface VLC {
   ): this;
   on(event: 'playlistchange', listener: (prev: any, next: any) => void): this;
   on(event: 'error', listener: (err: Error) => void): this;
+  /** fired when connected */
+  on(event: 'connect', listener: () => void): this;
   on(event: string | symbol, listener: (...args: any[]) => void): this;
 }
 
@@ -210,6 +222,8 @@ export class VLC extends EventEmitter {
   private _target: number;
   private _status: Status = null as any;
   private _playlist: Playlist = null as any;
+  private _maxTries: number = -1;
+  private _triesInterval: number = 1000;
 
   constructor(options: VLCOptions) {
     super();
@@ -232,6 +246,9 @@ export class VLC extends EventEmitter {
       this._tickLengthMs = 16;
     }
 
+    this._maxTries = options.maxTries || -1;
+    this._triesInterval = options.triesInterval || 1000;
+
     this._tickLengthNano = this._tickLengthMs * ms2nano;
     this._longWaitMs = Math.floor(this._tickLengthMs - 1);
     this._longWaitNano = this._longWaitMs * ms2nano;
@@ -244,14 +261,41 @@ export class VLC extends EventEmitter {
     ).toString('base64')}`;
 
     // check if VLC is up
-    this._sendCommand(CommandScope.STATUS)
-      .catch(this.emit.bind(this, 'error'))
+    this._connect()
       .then(() => {
-        if (this._autoUpdate) {
-          // start loop
-          this._doTick();
+        this.emit('connect');
+        if (this._autoUpdate) this._doTick();
+      })
+      .catch(this.emit.bind(this, 'error'));
+  }
+
+  private async _connect(): Promise<void> {
+    if (this._maxTries === 0) await this._sendCommand(CommandScope.STATUS);
+    else if (this._maxTries === -1) {
+      while (true) {
+        try {
+          await this._sendCommand(CommandScope.STATUS);
+        } catch (_) {
+          await waitFor(this._triesInterval);
+          continue;
         }
-      });
+
+        break;
+      }
+    } else {
+      for (let i = 1; i < this._maxTries; i++) {
+        try {
+          await this._sendCommand(CommandScope.STATUS);
+        } catch (_) {
+          await waitFor(this._triesInterval);
+          continue;
+        }
+
+        return;
+      }
+
+      await this._sendCommand(CommandScope.STATUS);
+    }
   }
 
   private _doTick(): void {
