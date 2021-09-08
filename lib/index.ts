@@ -1,5 +1,5 @@
-import equal from 'deep-equal';
 import { EventEmitter } from 'events';
+import equal from 'deep-equal';
 import http from 'http';
 import querystring from 'querystring';
 
@@ -159,7 +159,7 @@ export type VLCOptions = {
    * if it the case fire browsechange, statuschange or playlistchange event. default true.
    */
   changeEvents?: boolean;
-  /** max tries at the first connection before throwing an error set it to -1 for infinite try, default -1 */
+  /** max tries at the first connection before throwing an error set it to -1 for infinite try, default 3 */
   maxTries?: number;
   /** interval between two try in ms, default 1000 */
   triesInterval?: number;
@@ -196,6 +196,14 @@ function get<T = any>(options: http.RequestOptions): Promise<T> {
       response.on('error', reject);
       response.on('data', chunk => (data += chunk));
       response.on('end', () => {
+        if (response.statusCode !== 200) {
+          return reject(
+            new Error(
+              `${response.statusCode} ${response.statusMessage || 'HTTPError'}`
+            )
+          );
+        }
+
         try {
           resolve(JSON.parse(data));
         } catch (err) {
@@ -246,7 +254,7 @@ export class VLC extends EventEmitter {
       this._tickLengthMs = 16;
     }
 
-    this._maxTries = options.maxTries || -1;
+    this._maxTries = options.maxTries || 3;
     this._triesInterval = options.triesInterval || 1000;
 
     this._tickLengthNano = this._tickLengthMs * ms2nano;
