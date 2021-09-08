@@ -1,5 +1,4 @@
 import { EventEmitter } from 'events';
-import equal from 'deep-equal';
 import http from 'http';
 import querystring from 'querystring';
 
@@ -214,6 +213,34 @@ function get<T = any>(options: http.RequestOptions): Promise<T> {
 
     req.on('error', reject);
   });
+}
+
+function isObject(obj: any) {
+  if (typeof obj === 'object' && obj != null) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function equal(a: any, b: any) {
+  if (a === b) {
+    return true;
+  } else if (isObject(a) && isObject(b)) {
+    if (Object.keys(a).length !== Object.keys(b).length) {
+      return false;
+    }
+
+    for (var prop in a) {
+      if (!equal(a[prop], b[prop])) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  return false
 }
 
 export class VLC extends EventEmitter {

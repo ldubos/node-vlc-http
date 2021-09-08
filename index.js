@@ -1,0 +1,1 @@
+const { VLC } = require('./dist')
