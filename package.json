@@ -3,14 +3,15 @@
   "version": "1.1.4",
   "description": "HTTP API client for vlc.",
   "keywords": [
-    "nodejs",
+    "node",
     "vlc",
     "http",
-    "http-client",
     "client",
-    "vlc-player",
-    "api",
-    "api-client"
+    "interface",
+    "vlc-http",
+    "vlc-client",
+    "json",
+    "typed"
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
