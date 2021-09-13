@@ -5,5 +5,5 @@ lib/
 .gitattributes
 .gitignore
 .prettierrc
-.tsconfig.json
+tsconfig.json
 *.lock
