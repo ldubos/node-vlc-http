@@ -18,7 +18,10 @@
   "repository": "https://github.com/ldubos/node-vlc-http.git",
   "author": "ldubos <ludwig.dubos@gmail.com>",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build": "npx rimraf dist && npx tsc",
+    "lint": "npx eslint lib/*.ts"
+  },
   "devDependencies": {
     "@types/node": "^12.7.4",
     "@typescript-eslint/eslint-plugin": "^2.1.0",
