@@ -1,4 +1,6 @@
 import { EventEmitter } from 'events';
+import { URL } from 'url';
+import fs from 'fs';
 import http from 'http';
 import querystring from 'querystring';
 
@@ -95,7 +97,7 @@ type StatusStopped = StatusBase & {
 
 type Status = StatusPaused | StatusPlaying | StatusStopped;
 
-const enum CommandScope {
+enum CommandScope {
   BROWSE = '/requests/browse.json',
   STATUS = '/requests/status.json',
   PLAYLIST = '/requests/playlist.json'
@@ -143,6 +145,16 @@ type Playlist = PlaylistNode | PlaylistLeaf;
 
 const waitFor = (ms: number): Promise<void> =>
   new Promise(resolve => setTimeout(resolve, ms));
+
+const pathlikeToString = (path: fs.PathLike) => {
+  if (Buffer.isBuffer(path)) {
+    return path.toString('utf8');
+  } else if (path instanceof URL) {
+    return path.href;
+  }
+
+  return path;
+};
 
 export type VLCOptions = {
   host?: string;
@@ -240,7 +252,7 @@ function equal(a: any, b: any) {
     return true;
   }
 
-  return false
+  return false;
 }
 
 export class VLC extends EventEmitter {
@@ -437,30 +449,30 @@ export class VLC extends EventEmitter {
    * Add `uri` to playlist and start playback.
    */
   public addToQueueAndPlay(
-    uri: string,
+    uri: fs.PathLike,
     option?: 'noaudio' | 'novideo'
   ): Promise<Status> {
-    const options = {
-      input: uri,
+    return this._sendCommand(CommandScope.STATUS, 'in_play', {
+      input: pathlikeToString(uri),
       option
-    };
-
-    return this._sendCommand(CommandScope.STATUS, 'in_play', options);
+    });
   }
 
   /**
    * Add `uri` to playlist.
    */
-  public addToQueue(uri: string): Promise<Status> {
-    return this._sendCommand(CommandScope.STATUS, 'in_enqueue', { input: uri });
+  public addToQueue(uri: fs.PathLike): Promise<Status> {
+    return this._sendCommand(CommandScope.STATUS, 'in_enqueue', {
+      input: pathlikeToString(uri)
+    });
   }
 
   /**
    * Add subtitle to currently playing file.
    */
-  public addSubtitle(uri: string): Promise<Status> {
+  public addSubtitle(uri: fs.PathLike): Promise<Status> {
     return this._sendCommand(CommandScope.STATUS, 'addsubtitle', {
-      input: uri
+      input: pathlikeToString(uri)
     });
   }
 
