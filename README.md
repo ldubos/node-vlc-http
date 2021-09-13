@@ -1,6 +1,9 @@
-# node-vlc-http
+[![Stargazers][stars-shield]][stars-url] [![Downloads][downloads-shield]][downloads-url] [![Issues][issues-shield]][issues-url] [![Vulnerabilities][vulnerabilities-shield]][vulnerabilities-url] [![MIT License][license-shield]][license-url]
 
-HTTP API client for vlc.
+<br/>
+<div align="center">
+  <h1 style="text-align: center; margin-top: 15px; border:none;">node-vlc-http</h1>
+</div>
 
 ## Install:
 
@@ -29,7 +32,7 @@ const vlc = new VLC({
   // checks that browse, status and playlist have changed since the last update of one of its elements,
   // if it the case fire browsechange, statuschange or playlistchange event. default true.
   changeEvents,
-  // max tries at the first connection before throwing an error set it to -1 for infinite try, default -1
+  // max tries at the first connection before throwing an error set it to -1 for infinite try, default 3
   maxTries,
   // interval between each try in ms, default 1000
   triesInterval
@@ -169,4 +172,15 @@ vlc.seekToChapter(chapter)
 
 ## License:
 
-MIT
+[MIT](./LICENSE)
+
+[downloads-shield]: https://img.shields.io/npm/dt/node-vlc-http.svg?style=flat-square
+[downloads-url]: https://www.npmjs.com/package/node-vlc-http
+[vulnerabilities-shield]: https://snyk.io/test/github/ldubos/node-vlc-http/badge.svg?targetFile=package.json&style=flat-square
+[vulnerabilities-url]: https://snyk.io/test/github/ldubos/node-vlc-http?targetFile=package.json
+[stars-shield]: https://img.shields.io/github/stars/ldubos/node-vlc-http.svg?style=flat-square
+[stars-url]: https://github.com/ldubos/node-vlc-http/stargazers
+[issues-shield]: https://img.shields.io/github/issues/ldubos/node-vlc-http.svg?style=flat-square
+[issues-url]: https://github.com/ldubos/node-vlc-http/issues
+[license-shield]: https://img.shields.io/github/license/ldubos/node-vlc-http.svg?style=flat-square
+[license-url]: https://github.com/ldubos/node-vlc-http/blob/master/LICENSE
